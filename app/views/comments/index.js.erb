@@ -1,0 +1,5 @@
+<% @comments.each do |comment| %>
+
+$('ul').append("<li><%= comment.content %></li>");
+
+<% end %>
