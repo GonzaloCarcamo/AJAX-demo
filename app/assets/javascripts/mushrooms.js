@@ -1,7 +1,7 @@
 $(document).ready(function(){
 
     $('#getButton').click(function(){
-      $('ul').html('')
+
       $.ajax({
         type: "GET",
         url: "/comments",
@@ -13,7 +13,7 @@ $(document).ready(function(){
 
   $('[type=submit]').click(function(e){
     e.preventDefault()
-    if($('[type=text]').val() == ''){
+    if($('[name=create]').val() == ''){
       return false
     }
     $.ajax({
@@ -22,12 +22,23 @@ $(document).ready(function(){
       },
       type: "post",
       url: "/comments",
-      data: { comment: $('[type=text]').val() },
+      data: { comment: $('[name=create]').val() },
       dataType: "script"
     });
   })
 
+
+
+
+$('[name=q]').on('keyup', function(){
+  if($(this).val().length > 2){
+    $.ajax({
+      type: "get",
+      url: "/comments",
+      data: { q: $(this).val() },
+      dataType: "script"
+    });
+  }
 })
 
-
-// también puede ser $('h1').on('click', function(){})
+})
