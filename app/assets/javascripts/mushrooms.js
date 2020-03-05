@@ -1,4 +1,9 @@
 $(document).ready(function(){
+
+  $.ajaxSetup({beforeSend: function (xhr) {
+  xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))
+  }
+});
   // List all comments
   $('#getButton').click(function () {
     // fetch comments from the server
@@ -19,9 +24,7 @@ $(document).ready(function(){
 
       $.ajax({
         // Configure the authenticity token
-        beforeSend: function (xhr) {
-        xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))
-        },
+
         type: "post",
         url: "/comments",
         data: { comment: $('[name=create]').val() },
@@ -51,7 +54,53 @@ $(document).ready(function(){
       }
     })
 
+    $('ul').on('click', '.delete_comment',function(e){
+      e.preventDefault()
+      var id = $(this).closest('li')[0].id.split('_')[1]
+      $.ajax({
+
+        type: "delete",
+        url: "/comments/" + id,
+        dataType: "script",
+
+      });
+      })
+
+
+    $('ul').on('click', '.update_comment',function(e){
+      e.preventDefault()
+      var id = $(this).closest('li')[0].id.split('_')[1]
+      $.ajax({
+        type: "get",
+        url: "/comments/"+id+"/edit",
+        dataType: "script",
+});
+
   })
 
+  $('#update').on('click', 'button', function(e){
 
-    
+    e.preventDefault()
+    var comment = $(this).closest('form')[0][0].value
+    var id = $(this).closest('form')[0][1].value
+    $.ajax({
+
+      type: "patch",
+      url: '/comments/' + id,
+      data: { comment: comment },
+      dataType: "script",
+    });
+  })
+
+  $('ul').on('click', '.show_comment',function(e){
+    e.preventDefault()
+    var id = $(this).closest('li')[0].id.split('_')[1]
+    $.ajax({
+      type: "get",
+      url: "/comments/"+id,
+      dataType: "script",
+});
+
+})
+
+  })

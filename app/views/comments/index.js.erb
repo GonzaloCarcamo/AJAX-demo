@@ -1,8 +1,4 @@
 
-  $('ul').html('')
+$('ul').html('')
 
-<% @comments.each do |comment| %>
-
-$('ul').append("<li><%= comment.content %></li>");
-
-<% end %>
+$('ul').append('<%= j render @comments %>');
